@@ -30,7 +30,7 @@ import ch.nova_omnia.lernello.learningKit.model.LearningKit;
 import ch.nova_omnia.lernello.learningKit.service.LearningKitService;
 import ch.nova_omnia.lernello.learningUnit.dto.request.UpdateLearningUnitOrderDTO;
 import ch.nova_omnia.lernello.learningUnit.service.LearningUnitService;
-import ch.nova_omnia.lernello.statistic.model.LearningKitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningKitStatistic;
 import ch.nova_omnia.lernello.statistic.repository.LearningKitStatisticRepository;
 import ch.nova_omnia.lernello.user.dto.request.CreateTraineeDTO;
 import ch.nova_omnia.lernello.user.dto.response.GenericSuccessDTO;
@@ -64,7 +64,7 @@ public class LearningKitRestController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_kits:write')")
     public UUID deleteLearningKit(@PathVariable UUID id) {
-        List<LearningKitProgress> progressesToDelete = learningKitProgressRepository.findAllByLearningKit_Uuid(id);
+        List<LearningKitStatistic> progressesToDelete = learningKitProgressRepository.findAllByLearningKit_Uuid(id);
         if (!progressesToDelete.isEmpty()) {
             learningKitProgressRepository.deleteAll(progressesToDelete);
         }

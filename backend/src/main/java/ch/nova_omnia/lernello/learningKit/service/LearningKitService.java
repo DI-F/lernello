@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ch.nova_omnia.lernello.learningKit.model.LearningKit;
 import ch.nova_omnia.lernello.learningKit.repository.LearningKitRepository;
-import ch.nova_omnia.lernello.statistic.model.LearningKitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningKitStatistic;
 import ch.nova_omnia.lernello.statistic.service.StatisticService;
 import ch.nova_omnia.lernello.user.model.Role;
 import ch.nova_omnia.lernello.user.model.User;
@@ -98,11 +98,11 @@ public class LearningKitService {
     }
 
     private void updateLearningKitAverageProgress(LearningKit learningKit) {
-        List<LearningKitProgress> kitProgresses = progressService.getLearningKitProgressForAllTrainees(learningKit.getUuid());
+        List<LearningKitStatistic> kitProgresses = progressService.getLearningKitProgressForAllTrainees(learningKit.getUuid());
         if (kitProgresses != null) {
             int totalProgress = 0;
             int count = 0;
-            for (LearningKitProgress progress : kitProgresses) {
+            for (LearningKitStatistic progress : kitProgresses) {
                 totalProgress += progress.getProgressPercentage();
                 count++;
             }
@@ -118,11 +118,11 @@ public class LearningKitService {
     }
 
     private void updateLearningKitCompletionRate(LearningKit learningKit) {
-        List<LearningKitProgress> kitProgresses = progressService.getLearningKitProgressForAllTrainees(learningKit.getUuid());
+        List<LearningKitStatistic> kitProgresses = progressService.getLearningKitProgressForAllTrainees(learningKit.getUuid());
         if (kitProgresses != null) {
             int completedCount = 0;
             int totalCount = 0;
-            for (LearningKitProgress progress : kitProgresses) {
+            for (LearningKitStatistic progress : kitProgresses) {
                 if (progress.isCompleted()) {
                     completedCount++;
                 }

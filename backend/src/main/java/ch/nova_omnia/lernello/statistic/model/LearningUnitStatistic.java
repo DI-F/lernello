@@ -37,7 +37,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class LearningUnitProgress {
+public class LearningUnitStatistic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -57,7 +57,7 @@ public class LearningUnitProgress {
     @JoinColumn(name = "learning_kit_progress_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private LearningKitProgress learningKitProgress;
+    private LearningKitStatistic learningKitProgress;
 
     @NotNull
     @OneToMany(mappedBy = "learningUnitProgress", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -91,12 +91,12 @@ public class LearningUnitProgress {
     )
     private int progressPercentage = 0;
 
-    public LearningUnitProgress(User user, LearningUnit learningUnit) {
+    public LearningUnitStatistic(User user, LearningUnit learningUnit) {
         this.user = user;
         this.learningUnit = learningUnit;
     }
 
-    public LearningUnitProgress(User user, LearningUnit learningUnit, List<BlockStatistic> userBlockProgresses) {
+    public LearningUnitStatistic(User user, LearningUnit learningUnit, List<BlockStatistic> userBlockProgresses) {
         this.user = user;
         this.learningUnit = learningUnit;
         this.userBlockProgresses = userBlockProgresses;

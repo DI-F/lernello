@@ -36,8 +36,8 @@ import ch.nova_omnia.lernello.statistic.dto.request.LearningUnitOpenedDTO;
 import ch.nova_omnia.lernello.statistic.dto.request.TheoryBlockViewedDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.MultipleChoiceAnswerValidationResDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.QuestionAnswerValidationResDTO;
-import ch.nova_omnia.lernello.statistic.model.LearningKitProgress;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningKitStatistic;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.TheoryBlockStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.quiz.MultipleChoiceBlockStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.quiz.QuestionBlockStatistic;
@@ -86,12 +86,12 @@ class StatisticServiceTest {
         UUID kitId = UUID.randomUUID();
         LearningKit kit = new LearningKit();
         kit.setUuid(kitId);
-        LearningKitProgress progress = new LearningKitProgress(user, kit);
+        LearningKitStatistic progress = new LearningKitStatistic(user, kit);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);
         when(kitProgressRepo.findByUser_UuidAndLearningKit_Uuid(user.getUuid(), kitId)).thenReturn(Optional.of(progress));
 
-        LearningKitProgress result = service.getLearningKitProgress(kitId, userDetails);
+        LearningKitStatistic result = service.getLearningKitProgress(kitId, userDetails);
 
         assertThat(result).isEqualTo(progress);
     }
@@ -106,7 +106,7 @@ class StatisticServiceTest {
         when(kitProgressRepo.findByUser_UuidAndLearningKit_Uuid(user.getUuid(), kitId)).thenReturn(Optional.empty());
         when(kitRepo.findById(kitId)).thenReturn(Optional.of(kit));
 
-        LearningKitProgress result = service.getLearningKitProgress(kitId, userDetails);
+        LearningKitStatistic result = service.getLearningKitProgress(kitId, userDetails);
 
         assertThat(result.getLearningKit()).isEqualTo(kit);
         assertThat(result.getUser()).isEqualTo(user);
@@ -117,12 +117,12 @@ class StatisticServiceTest {
         UUID unitId = UUID.randomUUID();
         LearningUnit unit = new LearningUnit();
         unit.setUuid(unitId);
-        LearningUnitProgress progress = new LearningUnitProgress(user, unit);
+        LearningUnitStatistic progress = new LearningUnitStatistic(user, unit);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);
         when(unitProgressRepo.findByUser_UuidAndLearningUnit_Uuid(user.getUuid(), unitId)).thenReturn(Optional.of(progress));
 
-        LearningUnitProgress result = service.getLearningUnitProgress(unitId, userDetails);
+        LearningUnitStatistic result = service.getLearningUnitProgress(unitId, userDetails);
 
         assertThat(result).isEqualTo(progress);
     }
@@ -137,7 +137,7 @@ class StatisticServiceTest {
         when(unitProgressRepo.findByUser_UuidAndLearningUnit_Uuid(user.getUuid(), unitId)).thenReturn(Optional.empty());
         when(unitRepo.findById(unitId)).thenReturn(Optional.of(unit));
 
-        LearningUnitProgress result = service.getLearningUnitProgress(unitId, userDetails);
+        LearningUnitStatistic result = service.getLearningUnitProgress(unitId, userDetails);
 
         assertThat(result.getLearningUnit()).isEqualTo(unit);
         assertThat(result.getUser()).isEqualTo(user);
@@ -160,7 +160,7 @@ class StatisticServiceTest {
         when(kitProgressRepo.findByUser_UuidAndLearningKit_Uuid(any(), eq(kitId))).thenReturn(Optional.empty());
         when(kitProgressRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        List<LearningKitProgress> result = service.getLearningKitProgressForAllTrainees(kitId);
+        List<LearningKitStatistic> result = service.getLearningKitProgressForAllTrainees(kitId);
 
         assertThat(result).hasSize(2);
     }
@@ -172,7 +172,7 @@ class StatisticServiceTest {
         kit.setUuid(kitId);
         kit.setLearningUnits(Collections.emptyList());
 
-        LearningKitProgress progress = new LearningKitProgress(user, kit);
+        LearningKitStatistic progress = new LearningKitStatistic(user, kit);
         progress.setOpened(false);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);
@@ -181,7 +181,7 @@ class StatisticServiceTest {
 
         LearningKitOpened dto = new LearningKitOpened(kitId);
 
-        LearningKitProgress result = service.markLearningKitOpened(dto, userDetails);
+        LearningKitStatistic result = service.markLearningKitOpened(dto, userDetails);
 
         assertThat(result.isOpened()).isTrue();
         verify(kitProgressRepo, atLeastOnce()).save(any());
@@ -201,8 +201,8 @@ class StatisticServiceTest {
         unit.setLearningKit(kit);
         unit.setBlocks(Collections.emptyList());
 
-        LearningKitProgress kitProgress = new LearningKitProgress(user, kit);
-        LearningUnitProgress unitProgress = new LearningUnitProgress(user, unit);
+        LearningKitStatistic kitProgress = new LearningKitStatistic(user, kit);
+        LearningUnitStatistic unitProgress = new LearningUnitStatistic(user, unit);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);
         when(unitRepo.findById(unitId)).thenReturn(Optional.of(unit));
@@ -211,7 +211,7 @@ class StatisticServiceTest {
 
         LearningUnitOpenedDTO dto = new LearningUnitOpenedDTO(unitId);
 
-        LearningUnitProgress result = service.markLearningUnitOpened(dto, userDetails);
+        LearningUnitStatistic result = service.markLearningUnitOpened(dto, userDetails);
 
         assertThat(result.isOpened()).isTrue();
         verify(unitProgressRepo, atLeastOnce()).save(any());
@@ -231,8 +231,8 @@ class StatisticServiceTest {
         unit.setLearningKit(kit);
         block.setLearningUnit(unit);
 
-        LearningKitProgress kitProgress = new LearningKitProgress(user, kit);
-        LearningUnitProgress unitProgress = new LearningUnitProgress(user, unit);
+        LearningKitStatistic kitProgress = new LearningKitStatistic(user, kit);
+        LearningUnitStatistic unitProgress = new LearningUnitStatistic(user, unit);
         MultipleChoiceBlockStatistic mcProgress = new MultipleChoiceBlockStatistic(user, block, unitProgress);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);
@@ -263,8 +263,8 @@ class StatisticServiceTest {
         unit.setLearningKit(kit);
         block.setLearningUnit(unit);
 
-        LearningKitProgress kitProgress = new LearningKitProgress(user, kit);
-        LearningUnitProgress unitProgress = new LearningUnitProgress(user, unit);
+        LearningKitStatistic kitProgress = new LearningKitStatistic(user, kit);
+        LearningUnitStatistic unitProgress = new LearningUnitStatistic(user, unit);
         QuestionBlockStatistic qProgress = new QuestionBlockStatistic(user, block, unitProgress);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);
@@ -295,8 +295,8 @@ class StatisticServiceTest {
         unit.setLearningKit(kit);
         block.setLearningUnit(unit);
 
-        LearningKitProgress kitProgress = new LearningKitProgress(user, kit);
-        LearningUnitProgress unitProgress = new LearningUnitProgress(user, unit);
+        LearningKitStatistic kitProgress = new LearningKitStatistic(user, kit);
+        LearningUnitStatistic unitProgress = new LearningUnitStatistic(user, unit);
         TheoryBlockStatistic theoryProgress = new TheoryBlockStatistic(user, block, unitProgress);
 
         when(userService.getUserFromUserDetails(userDetails)).thenReturn(user);

@@ -20,14 +20,14 @@ import ch.nova_omnia.lernello.statistic.dto.request.CheckQuestionAnswerDTO;
 import ch.nova_omnia.lernello.statistic.dto.request.LearningKitOpened;
 import ch.nova_omnia.lernello.statistic.dto.request.LearningUnitOpenedDTO;
 import ch.nova_omnia.lernello.statistic.dto.request.TheoryBlockViewedDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.LearningKitProgressResDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.LearningUnitProgressResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.LearningKitStatisticResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.LearningUnitStatisticResDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.MultipleChoiceAnswerValidationResDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.QuestionAnswerValidationResDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.TheoryBlockViewedResDTO;
 import ch.nova_omnia.lernello.statistic.mapper.StatisticMapper;
-import ch.nova_omnia.lernello.statistic.model.LearningKitProgress;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningKitStatistic;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.TheoryBlockStatistic;
 import ch.nova_omnia.lernello.statistic.service.StatisticService;
 import jakarta.validation.Valid;
@@ -43,17 +43,17 @@ public class StatisticRestController {
 
     @PostMapping("/learning-kit/opened")
     @PreAuthorize("hasAuthority('SCOPE_progress:read')")
-    public LearningKitProgressResDTO markLearningKitOpened(
+    public LearningKitStatisticResDTO markLearningKitOpened(
                                                            @RequestBody @Valid LearningKitOpened dto, @AuthenticationPrincipal UserDetails userDetails) {
-        LearningKitProgress progress = progressService.markLearningKitOpened(dto, userDetails);
+        LearningKitStatistic progress = progressService.markLearningKitOpened(dto, userDetails);
         return progressMapper.toLearningKitProgressResDTO(progress);
     }
 
     @PostMapping("/learning-unit/opened")
     @PreAuthorize("hasAuthority('SCOPE_progress:read')")
-    public @Valid LearningUnitProgressResDTO markLearningUnitOpened(
+    public @Valid LearningUnitStatisticResDTO markLearningUnitOpened(
                                                                  @RequestBody @Valid LearningUnitOpenedDTO dto, @AuthenticationPrincipal UserDetails userDetails) {
-        LearningUnitProgress unitProgress = progressService.markLearningUnitOpened(dto, userDetails);
+        LearningUnitStatistic unitProgress = progressService.markLearningUnitOpened(dto, userDetails);
         return progressMapper.toLearningUnitProgressDTO(unitProgress);
     }
 
@@ -81,25 +81,25 @@ public class StatisticRestController {
 
     @GetMapping("/learning-kit/{learningKitId}")
     @PreAuthorize("hasAuthority('SCOPE_progress:read')")
-    public @Valid LearningKitProgressResDTO getLearningKitProgress(
+    public @Valid LearningKitStatisticResDTO getLearningKitProgress(
                                                                    @PathVariable UUID learningKitId, @AuthenticationPrincipal UserDetails userDetails) {
-        LearningKitProgress progress = progressService.getLearningKitProgress(learningKitId, userDetails);
+        LearningKitStatistic progress = progressService.getLearningKitProgress(learningKitId, userDetails);
         return progressMapper.toLearningKitProgressResDTO(progress);
     }
 
     @GetMapping("/learning-unit/{learningUnitId}")
     @PreAuthorize("hasAuthority('SCOPE_progress:read')")
-    public @Valid LearningUnitProgressResDTO getLearningUnitProgress(
+    public @Valid LearningUnitStatisticResDTO getLearningUnitProgress(
                                                                   @PathVariable UUID learningUnitId, @AuthenticationPrincipal UserDetails userDetails) {
-        LearningUnitProgress progress = progressService.getLearningUnitProgress(learningUnitId, userDetails);
+        LearningUnitStatistic progress = progressService.getLearningUnitProgress(learningUnitId, userDetails);
         return progressMapper.toLearningUnitProgressDTO(progress);
     }
 
     @GetMapping("/learning-kit/{learningKitId}/trainees-progress")
     @PreAuthorize("hasAuthority('SCOPE_kits:read')")
-    public @Valid List<LearningKitProgressResDTO> getLearningKitProgressForAllTrainees(
+    public @Valid List<LearningKitStatisticResDTO> getLearningKitProgressForAllTrainees(
                                                                                            @PathVariable UUID learningKitId) {
-        List<LearningKitProgress> progresses = progressService.getLearningKitProgressForAllTrainees(learningKitId);
+        List<LearningKitStatistic> progresses = progressService.getLearningKitProgressForAllTrainees(learningKitId);
         return progresses.stream().map(progressMapper::toLearningKitProgressResDTO).collect(Collectors.toList());
     }
 }

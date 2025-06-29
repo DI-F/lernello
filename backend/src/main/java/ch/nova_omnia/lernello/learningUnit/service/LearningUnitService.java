@@ -19,7 +19,7 @@ import ch.nova_omnia.lernello.learningUnit.dto.request.GenerateLearningUnitDTO;
 import ch.nova_omnia.lernello.learningUnit.dto.request.UpdateLearningUnitOrderDTO;
 import ch.nova_omnia.lernello.learningUnit.model.LearningUnit;
 import ch.nova_omnia.lernello.learningUnit.repository.LearningUnitRepository;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.repository.BlockStatisticRepository;
 import ch.nova_omnia.lernello.statistic.repository.LearningUnitStatisticRepository;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class LearningUnitService {
 
     @Transactional
     public void deleteById(UUID id) {
-        List<LearningUnitProgress> progressesToDelete = learningUnitProgressRepository.findAllByLearningUnit_Uuid(id);
+        List<LearningUnitStatistic> progressesToDelete = learningUnitProgressRepository.findAllByLearningUnit_Uuid(id);
         learningUnitProgressRepository.deleteAll(progressesToDelete);
         learningUnitRepository.deleteById(id);
     }

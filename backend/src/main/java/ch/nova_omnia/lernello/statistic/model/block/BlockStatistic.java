@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import ch.nova_omnia.lernello.block.model.Block;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.user.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -60,9 +60,9 @@ public abstract class BlockStatistic {
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private LearningUnitProgress learningUnitProgress;
+    private LearningUnitStatistic learningUnitProgress;
 
-    public BlockStatistic(User user, Block block, LearningUnitProgress learningUnitProgress) {
+    public BlockStatistic(User user, Block block, LearningUnitStatistic learningUnitProgress) {
         this.user = user;
         this.block = block;
         this.learningUnitProgress = learningUnitProgress;

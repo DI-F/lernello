@@ -35,7 +35,7 @@ import ch.nova_omnia.lernello.learningUnit.dto.request.UpdateLearningUnitOrderDT
 import ch.nova_omnia.lernello.learningUnit.model.LearningUnit;
 import ch.nova_omnia.lernello.learningUnit.repository.LearningUnitRepository;
 import ch.nova_omnia.lernello.learningUnit.service.LearningUnitService;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.repository.BlockStatisticRepository;
 import ch.nova_omnia.lernello.statistic.repository.LearningUnitStatisticRepository;
 
@@ -224,11 +224,11 @@ class LearningUnitServiceTest {
         UUID id = UUID.randomUUID();
         LearningUnit unit = new LearningUnit();
         unit.setUuid(id);
-        when(learningUnitProgressRepository.findAllByLearningUnit_Uuid(id)).thenReturn(List.of(new LearningUnitProgress()));
+        when(learningUnitProgressRepository.findAllByLearningUnit_Uuid(id)).thenReturn(List.of(new LearningUnitStatistic()));
 
         service.deleteById(id);
 
-        verify(learningUnitProgressRepository).deleteAll(List.of(new LearningUnitProgress()));
+        verify(learningUnitProgressRepository).deleteAll(List.of(new LearningUnitStatistic()));
         verify(learningUnitRepository).deleteById(id);
     }
 }

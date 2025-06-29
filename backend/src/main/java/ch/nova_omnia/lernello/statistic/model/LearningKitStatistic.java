@@ -37,7 +37,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class LearningKitProgress {
+public class LearningKitStatistic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -80,25 +80,25 @@ public class LearningKitProgress {
     @OneToMany(mappedBy = "learningKitProgress", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<LearningUnitProgress> learningUnitProgresses = new ArrayList<>();
+    private List<LearningUnitStatistic> learningUnitProgresses = new ArrayList<>();
 
-    public LearningKitProgress(User user, LearningKit learningKit) {
+    public LearningKitStatistic(User user, LearningKit learningKit) {
         this.user = user;
         this.learningKit = learningKit;
     }
 
-    public LearningKitProgress(User user, LearningKit learningKit, List<LearningUnitProgress> learningUnitProgresses) {
+    public LearningKitStatistic(User user, LearningKit learningKit, List<LearningUnitStatistic> learningUnitProgresses) {
         this.user = user;
         this.learningKit = learningKit;
         this.learningUnitProgresses = learningUnitProgresses;
     }
 
-    public void addLearningUnitProgress(LearningUnitProgress learningUnitProgress) {
+    public void addLearningUnitProgress(LearningUnitStatistic learningUnitProgress) {
         learningUnitProgresses.add(learningUnitProgress);
         learningUnitProgress.setLearningKitProgress(this);
     }
 
-    public void removeLearningUnitProgress(LearningUnitProgress learningUnitProgress) {
+    public void removeLearningUnitProgress(LearningUnitStatistic learningUnitProgress) {
         learningUnitProgresses.remove(learningUnitProgress);
         learningUnitProgress.setLearningKitProgress(null);
     }

@@ -1,17 +1,15 @@
 package ch.nova_omnia.lernello.statistic.dto.response;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
+import java.util.List;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-public record LearningKitProgressResDTO(
+public record LearningUnitStatisticResDTO(
     @NotNull
-    String learningKitId,
-    @NotNull
-    UUID userId,
+    String learningUnitId,
     @NotNull
     boolean isOpened,
     @NotNull
@@ -22,6 +20,8 @@ public record LearningKitProgressResDTO(
     @NotNull
     @Min(0)
     @Max(100)
-    int progressPercentage
+    int progressPercentage,
+    @NotNull
+    List<BlockStatisticResDTO> userBlockProgresses
 ) {
 }

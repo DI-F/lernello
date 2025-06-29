@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.nova_omnia.lernello.block.model.quiz.MultipleChoiceBlock;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.user.model.User;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -28,17 +28,17 @@ public class MultipleChoiceBlockStatistic extends QuizBlockStatistic {
     @Column(name = "last_answer", nullable = true)
     private List<String> lastAnswers = new ArrayList<>();
 
-    public MultipleChoiceBlockStatistic(User user, MultipleChoiceBlock block, LearningUnitProgress unitProgress, List<String> lastAnswers, Boolean isCorrect, Integer scoreReached) {
+    public MultipleChoiceBlockStatistic(User user, MultipleChoiceBlock block, LearningUnitStatistic unitProgress, List<String> lastAnswers, Boolean isCorrect, Integer scoreReached) {
         super(user, block, unitProgress, scoreReached, isCorrect);
         this.lastAnswers = lastAnswers;
     }
 
-    public MultipleChoiceBlockStatistic(User user, MultipleChoiceBlock block, LearningUnitProgress unitProgress, List<String> lastAnswers, Boolean isCorrect) {
+    public MultipleChoiceBlockStatistic(User user, MultipleChoiceBlock block, LearningUnitStatistic unitProgress, List<String> lastAnswers, Boolean isCorrect) {
         super(user, block, unitProgress, isCorrect);
         this.lastAnswers = lastAnswers;
     }
 
-    public MultipleChoiceBlockStatistic(User user, MultipleChoiceBlock block, LearningUnitProgress unitProgress) {
+    public MultipleChoiceBlockStatistic(User user, MultipleChoiceBlock block, LearningUnitStatistic unitProgress) {
         super(user, block, unitProgress);
     }
 

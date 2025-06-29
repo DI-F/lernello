@@ -4,15 +4,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import ch.nova_omnia.lernello.statistic.dto.response.BlockProgressResDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.LearningKitProgressResDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.LearningUnitProgressResDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.MultipleChoiceBlockProgressResDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.QuestionBlockProgressResDTO;
-import ch.nova_omnia.lernello.statistic.dto.response.TheoryBlockProgressResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.BlockStatisticResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.LearningKitStatisticResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.LearningUnitStatisticResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.MultipleChoiceBlockStatisticResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.QuestionBlockStatisticResDTO;
+import ch.nova_omnia.lernello.statistic.dto.response.TheoryBlockStatisticResDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.TheoryBlockViewedResDTO;
-import ch.nova_omnia.lernello.statistic.model.LearningKitProgress;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningKitStatistic;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.BlockStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.TheoryBlockStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.quiz.MultipleChoiceBlockStatistic;
@@ -25,18 +25,18 @@ public interface StatisticMapper {
     @Mapping(source = "user.uuid", target = "userId")
     @Mapping(source = "opened", target = "isOpened")
     @Mapping(source = "completed", target = "isCompleted")
-    LearningKitProgressResDTO toLearningKitProgressResDTO(LearningKitProgress learningKitProgress);
+    LearningKitStatisticResDTO toLearningKitProgressResDTO(LearningKitStatistic learningKitProgress);
 
     @Mapping(source = "learningUnit.uuid", target = "learningUnitId")
     @Mapping(source = "opened", target = "isOpened")
     @Mapping(source = "completed", target = "isCompleted")
-    LearningUnitProgressResDTO toLearningUnitProgressDTO(LearningUnitProgress learningUnitProgress);
+    LearningUnitStatisticResDTO toLearningUnitProgressDTO(LearningUnitStatistic learningUnitProgress);
 
     @Mapping(source = "block.uuid", target = "blockId")
     @Mapping(source = "isViewed", target = "isViewed")
     TheoryBlockViewedResDTO toTheoryBlockViewedResDTO(TheoryBlockStatistic theoryBlockProgress);
 
-    default BlockProgressResDTO toBlockProgressResDTO(BlockStatistic blockProgress) {
+    default BlockStatisticResDTO toBlockProgressResDTO(BlockStatistic blockProgress) {
         if (blockProgress == null) {
             return null;
         }
@@ -52,11 +52,11 @@ public interface StatisticMapper {
     }
 
     @Mapping(source = "block.uuid", target = "blockId")
-    MultipleChoiceBlockProgressResDTO toMultipleChoiceBlockProgressResDTO(MultipleChoiceBlockStatistic multipleChoiceBlockProgress);
+    MultipleChoiceBlockStatisticResDTO toMultipleChoiceBlockProgressResDTO(MultipleChoiceBlockStatistic multipleChoiceBlockProgress);
 
     @Mapping(source = "block.uuid", target = "blockId")
-    QuestionBlockProgressResDTO toQuestionBlockProgressResDTO(QuestionBlockStatistic questionBlockProgress);
+    QuestionBlockStatisticResDTO toQuestionBlockProgressResDTO(QuestionBlockStatistic questionBlockProgress);
 
     @Mapping(source = "block.uuid", target = "blockId")
-    TheoryBlockProgressResDTO toTheoryBlockProgressResDTO(TheoryBlockStatistic theoryBlockProgress);
+    TheoryBlockStatisticResDTO toTheoryBlockProgressResDTO(TheoryBlockStatistic theoryBlockProgress);
 }

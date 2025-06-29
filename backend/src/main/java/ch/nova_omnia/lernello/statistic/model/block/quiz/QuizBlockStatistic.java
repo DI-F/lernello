@@ -1,7 +1,7 @@
 package ch.nova_omnia.lernello.statistic.model.block.quiz;
 
 import ch.nova_omnia.lernello.block.model.Block;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.BlockStatistic;
 import ch.nova_omnia.lernello.user.model.User;
 import jakarta.persistence.Column;
@@ -25,18 +25,18 @@ public abstract class QuizBlockStatistic extends BlockStatistic {
     @Column(name = "is_correct", nullable = true)
     private Boolean isCorrect;
 
-    public QuizBlockStatistic(User user, Block block, LearningUnitProgress learningUnitProgress, Integer scoreReached, Boolean isCorrect) {
+    public QuizBlockStatistic(User user, Block block, LearningUnitStatistic learningUnitProgress, Integer scoreReached, Boolean isCorrect) {
         super(user, block, learningUnitProgress);
         this.scoreReached = scoreReached;
         this.isCorrect = isCorrect;
     }
 
-    public QuizBlockStatistic(User user, Block block, LearningUnitProgress learningUnitProgress, Boolean isCorrect) {
+    public QuizBlockStatistic(User user, Block block, LearningUnitStatistic learningUnitProgress, Boolean isCorrect) {
         super(user, block, learningUnitProgress);
         this.isCorrect = isCorrect;
     }
 
-    public QuizBlockStatistic(User user, Block block, LearningUnitProgress learningUnitProgress) {
+    public QuizBlockStatistic(User user, Block block, LearningUnitStatistic learningUnitProgress) {
         super(user, block, learningUnitProgress);
     }
 }

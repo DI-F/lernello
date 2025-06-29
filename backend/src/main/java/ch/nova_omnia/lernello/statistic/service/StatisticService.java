@@ -29,8 +29,8 @@ import ch.nova_omnia.lernello.statistic.dto.request.LearningUnitOpenedDTO;
 import ch.nova_omnia.lernello.statistic.dto.request.TheoryBlockViewedDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.MultipleChoiceAnswerValidationResDTO;
 import ch.nova_omnia.lernello.statistic.dto.response.QuestionAnswerValidationResDTO;
-import ch.nova_omnia.lernello.statistic.model.LearningKitProgress;
-import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.model.LearningKitStatistic;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.BlockStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.TheoryBlockStatistic;
 import ch.nova_omnia.lernello.statistic.model.block.quiz.MultipleChoiceBlockStatistic;
@@ -57,13 +57,13 @@ public class StatisticService {
     private final AIBlockService aiBlockService;
 
     @Transactional
-    public LearningKitProgress markLearningKitOpened(LearningKitOpened dto, UserDetails userDetails) {
+    public LearningKitStatistic markLearningKitOpened(LearningKitOpened dto, UserDetails userDetails) {
         User user = userService.getUserFromUserDetails(userDetails);
         updateLearningKitProgressPercentage(
                 getOrCreateLearningKitProgress(user, learningKitRepository.findById(dto.learningKitId()).orElseThrow(() -> new IllegalArgumentException("LearningKit not found with id: " + dto.learningKitId()))));
         LearningKit learningKit = learningKitRepository.findById(dto.learningKitId()).orElseThrow(() -> new IllegalArgumentException("LearningKit not found with id: " + dto.learningKitId()));
 
-        LearningKitProgress progress = getOrCreateLearningKitProgress(user, learningKit);
+        LearningKitStatistic progress = getOrCreateLearningKitProgress(user, learningKit);
         if (!progress.isOpened()) {
             progress.setOpened(true);
         }
@@ -73,7 +73,7 @@ public class StatisticService {
     }
 
     @Transactional
-    public LearningUnitProgress markLearningUnitOpened(LearningUnitOpenedDTO dto, UserDetails userDetails) {
+    public LearningUnitStatistic markLearningUnitOpened(LearningUnitOpenedDTO dto, UserDetails userDetails) {
         User user = userService.getUserFromUserDetails(userDetails);
         LearningUnit learningUnit = learningUnitRepository.findById(dto.learningUnitId()).orElseThrow(() -> new IllegalArgumentException("LearningUnit not found with id: " + dto.learningUnitId()));
 
@@ -82,13 +82,13 @@ public class StatisticService {
             throw new IllegalStateException("LearningUnit " + learningUnit.getUuid() + " is not associated with a LearningKit.");
         }
 
-        LearningKitProgress kitProgress = getOrCreateLearningKitProgress(user, learningKit);
+        LearningKitStatistic kitProgress = getOrCreateLearningKitProgress(user, learningKit);
         if (!kitProgress.isOpened()) {
             kitProgress.setOpened(true);
         }
         kitProgress.setLastOpenedAt(ZonedDateTime.now());
 
-        LearningUnitProgress unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, kitProgress);
+        LearningUnitStatistic unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, kitProgress);
         if (!unitProgress.isOpened()) {
             unitProgress.setOpened(true);
         }
@@ -120,7 +120,7 @@ public class StatisticService {
         if (learningUnit == null) {
             throw new IllegalStateException("Block " + mcBlock.getUuid() + " is not associated with a Learning Unit");
         }
-        LearningUnitProgress unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, getOrCreateLearningKitProgress(user, learningUnit.getLearningKit()));
+        LearningUnitStatistic unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, getOrCreateLearningKitProgress(user, learningUnit.getLearningKit()));
         BlockStatistic blockProgress = getOrCreateBlockProgress(user, mcBlock, unitProgress);
 
         if (blockProgress instanceof MultipleChoiceBlockStatistic mcProgress) {
@@ -165,7 +165,7 @@ public class StatisticService {
         if (learningUnit == null) {
             throw new IllegalStateException("Block " + qBlock.getUuid() + " is not associated with a Learning Unit");
         }
-        LearningUnitProgress unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, getOrCreateLearningKitProgress(user, learningUnit.getLearningKit()));
+        LearningUnitStatistic unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, getOrCreateLearningKitProgress(user, learningUnit.getLearningKit()));
         BlockStatistic blockProgress = getOrCreateBlockProgress(user, qBlock, unitProgress);
 
         if (blockProgress instanceof QuestionBlockStatistic mcProgress) {
@@ -213,8 +213,8 @@ public class StatisticService {
             throw new IllegalStateException("LearningUnit " + learningUnit.getUuid() + " is not associated with a LearningKit.");
         }
 
-        LearningKitProgress kitProgress = getOrCreateLearningKitProgress(user, learningKit);
-        LearningUnitProgress unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, kitProgress);
+        LearningKitStatistic kitProgress = getOrCreateLearningKitProgress(user, learningKit);
+        LearningUnitStatistic unitProgress = getOrCreateLearningUnitProgress(user, learningUnit, kitProgress);
 
         BlockStatistic blockProgress = getOrCreateBlockProgress(user, theoryBlock, unitProgress);
 
@@ -235,44 +235,44 @@ public class StatisticService {
         throw new IllegalStateException("BlockProgress is not of type TheoryBlockProgress");
     }
 
-    public LearningKitProgress getLearningKitProgress(UUID learningKitId, UserDetails userDetails) {
+    public LearningKitStatistic getLearningKitProgress(UUID learningKitId, UserDetails userDetails) {
         User user = userService.getUserFromUserDetails(userDetails);
-        Optional<LearningKitProgress> optProgress = learningKitProgressRepository.findByUser_UuidAndLearningKit_Uuid(user.getUuid(), learningKitId);
+        Optional<LearningKitStatistic> optProgress = learningKitProgressRepository.findByUser_UuidAndLearningKit_Uuid(user.getUuid(), learningKitId);
 
         return optProgress.orElseGet(() -> {
             LearningKit kit = learningKitRepository.findById(learningKitId).orElseThrow(() -> new IllegalArgumentException("LearningKit not found with id: " + learningKitId));
-            return new LearningKitProgress(user, kit);
+            return new LearningKitStatistic(user, kit);
         });
     }
 
     @Transactional
-    public List<LearningKitProgress> getLearningKitProgressForAllTrainees(UUID learningKitId) {
+    public List<LearningKitStatistic> getLearningKitProgressForAllTrainees(UUID learningKitId) {
         LearningKit learningKit = learningKitRepository.findById(learningKitId).orElseThrow(() -> new IllegalArgumentException("LearningKit not found with id: " + learningKitId));
 
         List<User> trainees = learningKit.getTrainees();
-        List<LearningKitProgress> allProgresses = new ArrayList<>();
+        List<LearningKitStatistic> allProgresses = new ArrayList<>();
 
         for (User trainee : trainees) {
-            LearningKitProgress progress = getOrCreateLearningKitProgress(trainee, learningKit);
+            LearningKitStatistic progress = getOrCreateLearningKitProgress(trainee, learningKit);
             allProgresses.add(progress);
         }
         return allProgresses;
     }
 
-    public LearningUnitProgress getLearningUnitProgress(UUID learningUnitId, UserDetails userDetails) {
+    public LearningUnitStatistic getLearningUnitProgress(UUID learningUnitId, UserDetails userDetails) {
         User user = userService.getUserFromUserDetails(userDetails);
-        Optional<LearningUnitProgress> optProgress = learningUnitProgressRepository.findByUser_UuidAndLearningUnit_Uuid(user.getUuid(), learningUnitId);
+        Optional<LearningUnitStatistic> optProgress = learningUnitProgressRepository.findByUser_UuidAndLearningUnit_Uuid(user.getUuid(), learningUnitId);
 
         return optProgress.orElseGet(() -> {
             LearningUnit unit = learningUnitRepository.findById(learningUnitId).orElseThrow(() -> new IllegalArgumentException("LearningUnit not found with id: " + learningUnitId));
-            return new LearningUnitProgress(user, unit);
+            return new LearningUnitStatistic(user, unit);
         });
     }
 
-    private LearningKitProgress getOrCreateLearningKitProgress(User user, LearningKit learningKit) {
+    private LearningKitStatistic getOrCreateLearningKitProgress(User user, LearningKit learningKit) {
         return learningKitProgressRepository.findByUser_UuidAndLearningKit_Uuid(user.getUuid(), learningKit.getUuid()).orElseGet(() -> {
-            LearningKitProgress newKitProgress = new LearningKitProgress(user, learningKit);
-            LearningKitProgress savedKitProgress = learningKitProgressRepository.save(newKitProgress);
+            LearningKitStatistic newKitProgress = new LearningKitStatistic(user, learningKit);
+            LearningKitStatistic savedKitProgress = learningKitProgressRepository.save(newKitProgress);
 
             for (LearningUnit learningUnit : learningKit.getLearningUnits()) {
                 getOrCreateLearningUnitProgress(user, learningUnit, savedKitProgress);
@@ -281,15 +281,15 @@ public class StatisticService {
         });
     }
 
-    private LearningUnitProgress getOrCreateLearningUnitProgress(User user, LearningUnit learningUnit, LearningKitProgress kitProgress) {
+    private LearningUnitStatistic getOrCreateLearningUnitProgress(User user, LearningUnit learningUnit, LearningKitStatistic kitProgress) {
         return learningUnitProgressRepository.findByUser_UuidAndLearningUnit_Uuid(user.getUuid(), learningUnit.getUuid()).orElseGet(() -> {
-            LearningUnitProgress newProgress = new LearningUnitProgress(user, learningUnit);
+            LearningUnitStatistic newProgress = new LearningUnitStatistic(user, learningUnit);
 
             if (kitProgress != null) {
                 newProgress.setLearningKitProgress(kitProgress);
             }
 
-            LearningUnitProgress savedUnitProgress = learningUnitProgressRepository.save(newProgress);
+            LearningUnitStatistic savedUnitProgress = learningUnitProgressRepository.save(newProgress);
 
             for (Block block : learningUnit.getBlocks()) {
                 getOrCreateBlockProgress(user, block, savedUnitProgress);
@@ -301,7 +301,7 @@ public class StatisticService {
         });
     }
 
-    private BlockStatistic getOrCreateBlockProgress(User user, Block block, LearningUnitProgress unitProgress) {
+    private BlockStatistic getOrCreateBlockProgress(User user, Block block, LearningUnitStatistic unitProgress) {
         final Block originalBlock = (block instanceof TranslatedBlock translatedBlock) ? translatedBlock.getOriginalBlock() : block;
 
         return blockProgressRepository.findByUser_UuidAndBlock_Uuid(user.getUuid(), originalBlock.getUuid()).orElseGet(() -> {
@@ -316,7 +316,7 @@ public class StatisticService {
         });
     }
 
-    private void updateLearningUnitProgressPercentage(LearningUnitProgress unitProgress) {
+    private void updateLearningUnitProgressPercentage(LearningUnitStatistic unitProgress) {
         LearningUnit learningUnit = unitProgress.getLearningUnit();
         if (learningUnit == null) return;
 
@@ -348,7 +348,7 @@ public class StatisticService {
         learningUnitProgressRepository.save(unitProgress);
     }
 
-    private void updateLearningKitProgressPercentage(LearningKitProgress kitProgress) {
+    private void updateLearningKitProgressPercentage(LearningKitStatistic kitProgress) {
         LearningKit learningKit = kitProgress.getLearningKit();
         if (learningKit == null) return;
 
@@ -370,7 +370,7 @@ public class StatisticService {
 
         for (LearningUnit learningUnit : learningUnitsInKit) {
             totalBlocksInKit += learningUnit.getBlocks().size();
-            LearningUnitProgress learningUnitProgress = getOrCreateLearningUnitProgress(user, learningUnit, kitProgress);
+            LearningUnitStatistic learningUnitProgress = getOrCreateLearningUnitProgress(user, learningUnit, kitProgress);
 
             List<BlockStatistic> blockProgressesInLup = blockProgressRepository.findByLearningUnitProgress_Uuid(learningUnitProgress.getUuid());
 
