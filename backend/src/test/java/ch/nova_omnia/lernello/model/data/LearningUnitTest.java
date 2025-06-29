@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 
+import ch.nova_omnia.lernello.PostgresTestConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,10 @@ import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.context.annotation.Import;
 
 @DataJpaTest
+@Import(PostgresTestConfig.class)
 public class LearningUnitTest {
     @Autowired
     private LearningKitRepository learningKitRepository;

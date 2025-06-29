@@ -41,6 +41,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito:mockito-core:5.5.0")
     testImplementation("org.mockito:mockito-junit-jupiter:5.5.0")
+    testImplementation("org.testcontainers:postgresql:1.21.2")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
 }
 
 dependencyManagement {
