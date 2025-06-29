@@ -92,7 +92,7 @@ docker exec -it lernello-dev-db   psql -U postgres -d lernello
 ### 🚀 One-shot dev start
 
 ```bash
-./start-dev.sh
+gradle startDev
 ```
 
 This will
