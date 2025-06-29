@@ -54,3 +54,18 @@ dependencyManagement {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+val startDocker by tasks.registering(Exec::class) {
+    group = "development"
+    description = "Starts PostgreSQL via Docker Compose"
+    workingDir = file("../docker")
+    commandLine = listOf("docker", "compose", "up", "-d")
+}
+
+tasks.register("startDev") {
+    group = "development"
+    description = "Starts Docker and runs backend with local profile"
+
+    dependsOn(startDocker)       // ensures docker is started before
+    finalizedBy("bootRun")       // runs bootRun after this task
+}
