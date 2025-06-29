@@ -33,7 +33,7 @@ dependencies {
     implementation("org.openapitools:jackson-databind-nullable:0.2.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql:42.7.3")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.2.Final")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
