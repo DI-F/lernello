@@ -29,12 +29,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import ch.nova_omnia.lernello.model.data.LearningKit;
-import ch.nova_omnia.lernello.model.data.user.Role;
-import ch.nova_omnia.lernello.model.data.user.User;
-import ch.nova_omnia.lernello.repository.LearningKitRepository;
-import ch.nova_omnia.lernello.repository.UserRepository;
+import ch.nova_omnia.lernello.learningKit.model.LearningKit;
+import ch.nova_omnia.lernello.learningKit.repository.LearningKitRepository;
 import ch.nova_omnia.lernello.security.JwtUtil;
+import ch.nova_omnia.lernello.user.model.Role;
+import ch.nova_omnia.lernello.user.model.User;
+import ch.nova_omnia.lernello.user.repository.UserRepository;
+import ch.nova_omnia.lernello.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {

@@ -1,20 +1,20 @@
 package ch.nova_omnia.lernello.service;
 
-import ch.nova_omnia.lernello.dto.request.GenerateLearningUnitDTO;
-import ch.nova_omnia.lernello.dto.request.UpdateLearningUnitOrderDTO;
-import ch.nova_omnia.lernello.model.data.LearningKit;
-import ch.nova_omnia.lernello.model.data.LearningUnit;
-import ch.nova_omnia.lernello.model.data.block.Block;
-import ch.nova_omnia.lernello.model.data.block.TheoryBlock;
-import ch.nova_omnia.lernello.model.data.block.TranslatedBlock;
-import ch.nova_omnia.lernello.model.data.progress.LearningUnitProgress;
-import ch.nova_omnia.lernello.repository.BlockProgressRepository;
-import ch.nova_omnia.lernello.repository.BlockRepository;
-import ch.nova_omnia.lernello.repository.LearningKitRepository;
-import ch.nova_omnia.lernello.repository.LearningUnitProgressRepository;
-import ch.nova_omnia.lernello.repository.LearningUnitRepository;
-import ch.nova_omnia.lernello.repository.TranslatedBlockRepository;
-import ch.nova_omnia.lernello.service.block.AIBlockService;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,10 +22,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import ch.nova_omnia.lernello.block.model.Block;
+import ch.nova_omnia.lernello.block.model.TheoryBlock;
+import ch.nova_omnia.lernello.block.model.TranslatedBlock;
+import ch.nova_omnia.lernello.block.repository.BlockRepository;
+import ch.nova_omnia.lernello.block.repository.TranslatedBlockRepository;
+import ch.nova_omnia.lernello.block.service.AIBlockService;
+import ch.nova_omnia.lernello.learningKit.model.LearningKit;
+import ch.nova_omnia.lernello.learningKit.repository.LearningKitRepository;
+import ch.nova_omnia.lernello.learningUnit.dto.request.GenerateLearningUnitDTO;
+import ch.nova_omnia.lernello.learningUnit.dto.request.UpdateLearningUnitOrderDTO;
+import ch.nova_omnia.lernello.learningUnit.model.LearningUnit;
+import ch.nova_omnia.lernello.learningUnit.repository.LearningUnitRepository;
+import ch.nova_omnia.lernello.learningUnit.service.LearningUnitService;
+import ch.nova_omnia.lernello.statistic.model.LearningUnitProgress;
+import ch.nova_omnia.lernello.statistic.repository.BlockStatisticRepository;
+import ch.nova_omnia.lernello.statistic.repository.LearningUnitStatisticRepository;
 
 @ExtendWith(MockitoExtension.class)
 class LearningUnitServiceTest {
@@ -35,7 +47,7 @@ class LearningUnitServiceTest {
     @Mock
     private LearningKitRepository learningKitRepository;
     @Mock
-    private LearningUnitProgressRepository learningUnitProgressRepository;
+    private LearningUnitStatisticRepository learningUnitProgressRepository;
     @Mock
     private TranslatedBlockRepository translatedBlockRepository;
     @Mock
@@ -43,7 +55,7 @@ class LearningUnitServiceTest {
     @Mock
     private AIBlockService aiBlockService;
     @Mock
-    private BlockProgressRepository blockProgressRepository;
+    private BlockStatisticRepository blockProgressRepository;
     @InjectMocks
     private LearningUnitService service;
 

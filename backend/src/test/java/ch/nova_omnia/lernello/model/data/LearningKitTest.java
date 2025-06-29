@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import ch.nova_omnia.lernello.repository.LearningKitRepository;
+import ch.nova_omnia.lernello.learningKit.model.LearningKit;
+import ch.nova_omnia.lernello.learningKit.repository.LearningKitRepository;
+import ch.nova_omnia.lernello.learningUnit.model.LearningUnit;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

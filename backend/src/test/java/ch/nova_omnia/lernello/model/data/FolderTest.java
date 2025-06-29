@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import ch.nova_omnia.lernello.repository.FolderRepository;
+import ch.nova_omnia.lernello.folder.model.Folder;
+import ch.nova_omnia.lernello.folder.repository.FolderRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

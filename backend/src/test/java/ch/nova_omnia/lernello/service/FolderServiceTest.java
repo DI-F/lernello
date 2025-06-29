@@ -1,19 +1,25 @@
 package ch.nova_omnia.lernello.service;
 
-import ch.nova_omnia.lernello.model.data.Folder;
-import ch.nova_omnia.lernello.repository.FolderRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import ch.nova_omnia.lernello.folder.model.Folder;
+import ch.nova_omnia.lernello.folder.repository.FolderRepository;
+import ch.nova_omnia.lernello.folder.service.FolderService;
 
 @ExtendWith(MockitoExtension.class)
 class FolderServiceTest {

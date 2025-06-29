@@ -1,9 +1,23 @@
 package ch.nova_omnia.lernello.service;
 
-import ch.nova_omnia.lernello.model.data.File;
-import ch.nova_omnia.lernello.repository.FileRepository;
-import ch.nova_omnia.lernello.repository.LearningKitRepository;
-import ch.nova_omnia.lernello.service.file.FileSystemService;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,22 +28,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import ch.nova_omnia.lernello.file.model.File;
+import ch.nova_omnia.lernello.file.repository.FileRepository;
+import ch.nova_omnia.lernello.file.service.FileSystemService;
+import ch.nova_omnia.lernello.learningKit.repository.LearningKitRepository;
 
 @ExtendWith(MockitoExtension.class)
 class FileSystemServiceTest {

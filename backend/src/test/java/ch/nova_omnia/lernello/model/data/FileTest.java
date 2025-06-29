@@ -20,7 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import ch.nova_omnia.lernello.repository.FileRepository;
+import ch.nova_omnia.lernello.file.model.File;
+import ch.nova_omnia.lernello.file.repository.FileRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

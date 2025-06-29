@@ -1,10 +1,19 @@
 package ch.nova_omnia.lernello.service;
 
-import ch.nova_omnia.lernello.model.data.LearningKit;
-import ch.nova_omnia.lernello.model.data.user.Role;
-import ch.nova_omnia.lernello.model.data.user.User;
-import ch.nova_omnia.lernello.repository.LearningKitRepository;
-import ch.nova_omnia.lernello.repository.UserRepository;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,19 +23,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import ch.nova_omnia.lernello.learningKit.model.LearningKit;
+import ch.nova_omnia.lernello.learningKit.repository.LearningKitRepository;
+import ch.nova_omnia.lernello.learningKit.service.LearningKitService;
+import ch.nova_omnia.lernello.statistic.service.StatisticService;
+import ch.nova_omnia.lernello.user.model.Role;
+import ch.nova_omnia.lernello.user.model.User;
+import ch.nova_omnia.lernello.user.repository.UserRepository;
+import ch.nova_omnia.lernello.user.service.EmailService;
 
 @ExtendWith(MockitoExtension.class)
 class LearningKitServiceTest {
@@ -41,7 +45,7 @@ class LearningKitServiceTest {
     private EmailService emailService;
 
     @Mock
-    private ProgressService progressService;
+    private StatisticService progressService;
 
     @InjectMocks
     private LearningKitService service;

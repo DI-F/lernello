@@ -1,11 +1,18 @@
 package ch.nova_omnia.lernello.service;
 
-import ch.nova_omnia.lernello.model.data.LearningKit;
-import ch.nova_omnia.lernello.model.data.user.Role;
-import ch.nova_omnia.lernello.model.data.user.User;
-import ch.nova_omnia.lernello.repository.UserRepository;
-import jakarta.mail.Session;
-import jakarta.mail.internet.MimeMessage;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,15 +20,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.lang.reflect.Field;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import ch.nova_omnia.lernello.learningKit.model.LearningKit;
+import ch.nova_omnia.lernello.user.model.Role;
+import ch.nova_omnia.lernello.user.model.User;
+import ch.nova_omnia.lernello.user.repository.UserRepository;
+import ch.nova_omnia.lernello.user.service.EmailService;
+import ch.nova_omnia.lernello.user.service.UserService;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeMessage;
 
 @ExtendWith(MockitoExtension.class)
 class EmailServiceTest {

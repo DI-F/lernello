@@ -1,8 +1,12 @@
 package ch.nova_omnia.lernello.service;
 
-import ch.nova_omnia.lernello.model.data.user.Role;
-import ch.nova_omnia.lernello.model.data.user.User;
-import ch.nova_omnia.lernello.repository.UserRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,12 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.List;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
+import ch.nova_omnia.lernello.user.model.Role;
+import ch.nova_omnia.lernello.user.model.User;
+import ch.nova_omnia.lernello.user.repository.UserRepository;
+import ch.nova_omnia.lernello.user.service.CustomUserDetailsService;
 
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {

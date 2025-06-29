@@ -1,0 +1,139 @@
+package ch.nova_omnia.lernello.user.api;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ch.nova_omnia.lernello.user.dto.request.ChangePasswordDataDTO;
+import ch.nova_omnia.lernello.user.dto.request.CreateTraineeDTO;
+import ch.nova_omnia.lernello.user.dto.request.CreateUserDTO;
+import ch.nova_omnia.lernello.user.dto.request.UpdateUserDTO;
+import ch.nova_omnia.lernello.user.dto.request.UserLocaleDTO;
+import ch.nova_omnia.lernello.user.dto.response.GenericSuccessDTO;
+import ch.nova_omnia.lernello.user.dto.response.TraineeUserDTO;
+import ch.nova_omnia.lernello.user.dto.response.UserInfoDTO;
+import ch.nova_omnia.lernello.user.dto.response.UserResDTO;
+import ch.nova_omnia.lernello.user.mapper.TraineeUserMapper;
+import ch.nova_omnia.lernello.user.mapper.UserInfoMapper;
+import ch.nova_omnia.lernello.user.mapper.UserLocaleMapper;
+import ch.nova_omnia.lernello.user.mapper.UserMapper;
+import ch.nova_omnia.lernello.user.model.User;
+import ch.nova_omnia.lernello.user.service.EmailService;
+import ch.nova_omnia.lernello.user.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/user")
+@Validated
+public class UserRestController {
+    private final UserService userService;
+    private final UserLocaleMapper userLocaleMapper;
+    private final UserInfoMapper userInfoMapper;
+    private final TraineeUserMapper traineeUserMapper;
+    private final UserMapper userMapper;
+    private final EmailService emailService;
+
+    @PostMapping("/password")
+    @PreAuthorize("hasAuthority('SCOPE_password:write')")
+    public @Valid GenericSuccessDTO changePassword(
+        @RequestBody @Valid ChangePasswordDataDTO data, @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        boolean status = userService.changePassword(userDetails.getUsername(), data.newPassword());
+        return new GenericSuccessDTO(status);
+    }
+
+    @GetMapping("/trainees")
+    @PreAuthorize("hasAuthority('SCOPE_user:read')")
+    public List<@Valid TraineeUserDTO> getAllTrainees() {
+        return userService.findAllTrainees().stream().map(traineeUserMapper::toDTO).toList();
+    }
+
+    @GetMapping("/instructors")
+    @PreAuthorize("hasAuthority('SCOPE_user:read')")
+    public List<@Valid TraineeUserDTO> getAllInstructors() {
+        return userService.findAllInstructors().stream().map(traineeUserMapper::toDTO).toList();
+    }
+
+    @GetMapping("/info")
+    @PreAuthorize("hasAuthority('SCOPE_self:read')")
+    public @Valid UserInfoDTO getUserInfo(
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        User user = userService.findByUsername(userDetails.getUsername());
+        return userInfoMapper.toDTO(user);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_user:read')")
+    public @Valid UserResDTO getUser(@PathVariable UUID id) {
+        User user = userService.findByUuid(id);
+        return userMapper.toDTO(user);
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
+    public @Valid UserResDTO editUser(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO updateUserDTO) {
+        User user = userMapper.toEntity(updateUserDTO);
+        User updatedUser = userService.update(id, user);
+        return userMapper.toDTO(updatedUser);
+    }
+
+    @PostMapping("/")
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
+    public @Valid UserResDTO createUser(
+        @RequestBody @Valid CreateUserDTO userDTO
+    ) {
+        User user = userService.createUser(userDTO.username(), userDTO.name(), userDTO.surname(), userDTO.role());
+        return userMapper.toDTO(user);
+    }
+
+    @PatchMapping("/reset/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
+    public @Valid UUID resetUserPassword(@PathVariable UUID id) {
+        User user = userService.findByUuid(id);
+        emailService.sendNewLoginData(user);
+        return id;
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
+    public UUID deleteUser(
+        @PathVariable UUID id
+    ) {
+        userService.deleteUser(id);
+        return id;
+    }
+
+    @PostMapping("/locale")
+    @PreAuthorize("hasAuthority('SCOPE_self:write')")
+    public @Valid UserLocaleDTO setUserLocale(
+        @RequestBody @Valid UserLocaleDTO data, @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String locale = userService.setLocale(userDetails.getUsername(), data.locale());
+        return userLocaleMapper.toDTO(locale);
+    }
+
+
+    @PatchMapping("/trainee")
+    @PreAuthorize("hasAuthority('SCOPE_user:write')")
+    public @Valid TraineeUserDTO editTrainee(
+        @RequestBody @Valid CreateTraineeDTO traineeDetails
+    ) {
+        User trainee = userService.editTrainee(traineeDetails.username(), traineeDetails.name(), traineeDetails.surname());
+        return traineeUserMapper.toDTO(trainee);
+    }
+}

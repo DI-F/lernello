@@ -3,11 +3,12 @@ package ch.nova_omnia.lernello.model.data;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import ch.nova_omnia.lernello.model.data.user.Role;
-import ch.nova_omnia.lernello.model.data.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import ch.nova_omnia.lernello.user.model.Role;
+import ch.nova_omnia.lernello.user.model.User;
 
 @DataJpaTest
 public class UserTest {
