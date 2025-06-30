@@ -64,15 +64,15 @@ gradle build --continuous
 
 ---
 
-## 🐳 PostgreSQL (Dev)
+## 🐳 PostgreSQL (`/docker`)
 
 We run Postgres via **Docker Compose** – no local install needed.
 
-| Action | Command |
-|--------|---------|
-| **Start DB** | `cd docker && docker compose up -d` |
-| **Restart (keep data)** | `cd docker && docker compose restart` |
-| **Reset (delete data)** | `cd docker && docker compose down -v && docker compose up -d` |
+| Action | Command                                         |
+|--------|-------------------------------------------------|
+| **Start DB** | `docker compose up -d`                          |
+| **Restart (keep data)** | `docker compose down`                           |
+| **Reset (delete data)** | `docker compose down -v`                        |
 
 > **Volume note**    
 > Data lives in the named Docker volume **`pgdata`**.  
@@ -84,9 +84,17 @@ We run Postgres via **Docker Compose** – no local install needed.
 |-----------|------|----------|----------|----------|
 | localhost | 15432| lernello | postgres | secret   |
 
+### PGAdmin4 for GUI access
+> **Note:** PGAdmin4 is optional, but useful for managing the database.
+
+You can access pgAdmin4 at the URL (after starting the Docker Compose):
+```
+http://localhost:16543
+```
+
 ```bash
 # quick psql inside the container
-docker exec -it lernello-dev-db   psql -U postgres -d lernello
+docker exec -it lernello-db   psql -U postgres -d lernello
 ```
 
 ### 🚀 One-shot dev start
