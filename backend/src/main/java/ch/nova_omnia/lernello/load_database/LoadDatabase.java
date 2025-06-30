@@ -54,11 +54,14 @@ public class LoadDatabase {
 
             List<User> trainees = List.of(dante, peter, julia, david, anna, michael, lisa, thomas, sara);
 
+            if (learningKitRepository.findByName(("Ausrüstung")).isPresent()) {
+                return; // Premade kit already exists, no need to create it again
+            }
+
             LearningKit premadeKit = new LearningKit();
             premadeKit.setName("Ausrüstung");
             premadeKit.setDescription("In dieser Lerneinheit geht es um die Schacht- und Beckenausruestung, die in der Bergbauindustrie verwendet wird.");
             premadeKit.setPublished(true);
-
             premadeKit.setTrainees(trainees);
 
             LearningUnit premadeUnit = new LearningUnit("Schwimmerdrossel Typ WSD", premadeKit);
