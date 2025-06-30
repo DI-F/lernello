@@ -10,6 +10,7 @@ Check the project sketch (German, PDF):
 ---
 
 ## 📦 Table of Contents
+
 1. [Backend](#backend-backend)
 2. [PostgreSQL (Dev)](#-postgresql-dev)
 3. [Frontend](#frontend-frontend)
@@ -22,12 +23,14 @@ Check the project sketch (German, PDF):
 > **Stack:** Java 23 · Gradle 8+ · Spring Boot
 
 ### Requirements
-| Tool  | Version |
-|-------|---------|
-| Java  | 23      |
-| Gradle| 8 (Wrapper included) |
+
+| Tool   | Version              |
+|--------|----------------------|
+| Java   | 23                   |
+| Gradle | 8 (Wrapper included) |
 
 ### Common Commands
+
 ```bash
 # Live-reload backend (auto-restart on rebuild):
 gradle bootRun
@@ -68,11 +71,11 @@ gradle build --continuous
 
 We run Postgres via **Docker Compose** – no local install needed.
 
-| Action | Command                                         |
-|--------|-------------------------------------------------|
-| **Start DB** | `docker compose up -d`                          |
-| **Restart (keep data)** | `docker compose down`                           |
-| **Reset (delete data)** | `docker compose down -v`                        |
+| Action                  | Command                  |
+|-------------------------|--------------------------|
+| **Start DB**            | `docker compose up -d`   |
+| **Restart (keep data)** | `docker compose down`    |
+| **Reset (delete data)** | `docker compose down -v` |
 
 > **Volume note**    
 > Data lives in the named Docker volume **`pgdata`**.  
@@ -80,17 +83,27 @@ We run Postgres via **Docker Compose** – no local install needed.
 
 ### Connection details
 
-| Host      | Port | Database | User     | Password |
-|-----------|------|----------|----------|----------|
-| localhost | 15432| lernello | postgres | secret   |
+| Host      | Port  | Database | User     | Password |
+|-----------|-------|----------|----------|----------|
+| localhost | 15432 | lernello | postgres | secret   |
 
 ### PGAdmin4 for GUI access
+
 > **Note:** PGAdmin4 is optional, but useful for managing the database.
 
 You can access pgAdmin4 at the URL (after starting the Docker Compose):
+
 ```
 http://localhost:16543
 ```
+
+| Field (Register “General → Connection”) | Value       |
+|-----------------------------------------|-------------|
+| Host name/address                       | lernello-db |
+| Port	                                   | 15432       |
+| Maintenance database	                   | lernello    |
+| Username	                               | postgres    |
+| Password	                               | secret      |
 
 ```bash
 # quick psql inside the container
@@ -115,9 +128,11 @@ This will
 > **Stack:** SvelteKit · TypeScript · Skeleton UI · TailwindCSS · Prettier · ESLint
 
 ### Requirements
+
 - Node.js 18 +
 
 ### Common Commands
+
 ```bash
 npm i            # install dependencies
 npm run dev      # local dev server
