@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres
+    container_name: lernello-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: lernello
+    ports:
+      - "15432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: lernello-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: frodo@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:

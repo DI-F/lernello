@@ -1,74 +1,155 @@
-# PM4
+# PM4 · Lernello
 
 Hi 👉👈
 
-If you're interested in our project-sketch, you can find it under [Lernello_krea_Projektskizze_PM4_FS25.pdf](documentation/Lernello_krea_Projektskizze_PM4.pdf).
+Curious about the concept behind Lernello?  
+Check the project sketch (German, PDF):
 
+- **[Lernello_krea_Projektskizze_PM4_FS25.pdf](documentation/Lernello_krea_Projektskizze_PM4.pdf)**
+
+---
+
+## 📦 Table of Contents
+
+1. [Backend](#backend-backend)
+2. [PostgreSQL](#-postgresql-docker)
+3. [Frontend](#frontend-frontend)
+4. [Swagger / API Docs](#swagger)
+
+---
 
 ## Backend (`/backend`)
 
-Java, Gradle, SpringBoot.
+> **Stack:** Java 23 · Gradle 8+ · Spring Boot
 
 ### Requirements
 
-- Java 23
-- Gradle 8+ (or just use gradlew)
+| Tool   | Version              |
+|--------|----------------------|
+| Java   | 23                   |
+| Gradle | 8 (Wrapper included) |
 
-### Scripts
+### Common Commands
 
-- `gradle bootRun` to start the server (will auto restart on rebuild)
-- `gradle build --continuous` to auto build when files change
+```bash
+# Live-reload backend (auto-restart on rebuild):
+gradle bootRun
 
-### OpenAI API Key (Required for AI features)
+# Continuous build on file changes (no run):
+gradle build --continuous
+```
 
-To use AI functionality, set the `OPENAI_API_KEY` **as an environment variable** before starting the backend.
+### OpenAI API Key (required for AI features)
 
-#### Temporarily in your terminal:
+1. **Set an environment variable** before starting the backend
 
-- PowerShell (Windows):
-  $env:OPENAI_API_KEY = "sk-..."
+   ```powershell
+   # PowerShell (Windows)
+   $env:OPENAI_API_KEY = "sk-..."
+   ```
+   ```cmd
+   :: CMD (Windows)
+   set OPENAI_API_KEY=sk-...
+   ```
+   ```bash
+   # Bash / macOS / Linux
+   export OPENAI_API_KEY=sk-...
+   ```
 
-- CMD (Windows):
-  set OPENAI_API_KEY=sk-...
+2. **Or** add it once in *IntelliJ*  
+   `Run → Edit Configurations → Environment variables`
 
-- Bash/macOS/Linux:
-  export OPENAI_API_KEY=sk-...
-
-#### Or permanently in IntelliJ:
-
-1. Go to `Run > Edit Configurations`
-2. Select your Spring Boot configuration
-3. Add under Environment variables:
+3. **(Last resort)** place it in `application.properties`  
+   *Not recommended for production – commits leak secrets.*
+   ```properties
    OPENAI_API_KEY=sk-...
+   ```
 
-#### Optional: In `application.properties` (not recommended for production)
+---
 
-OPENAI_API_KEY=sk-...
+## 🐳 PostgreSQL (`/docker`)
+
+We run Postgres via **Docker Compose** – no local install needed.
+
+| Action                  | Command                  |
+|-------------------------|--------------------------|
+| **Start DB**            | `docker compose up -d`   |
+| **Restart (keep data)** | `docker compose down`    |
+| **Reset (delete data)** | `docker compose down -v` |
+
+> **Volume note**    
+> Data lives in the named Docker volume **`pgdata`**.  
+> Removing with `docker compose down -v` creates a fresh database.
+
+### Connection details
+
+| Host      | Port  | Database | User     | Password |
+|-----------|-------|----------|----------|----------|
+| localhost | 15432 | lernello | postgres | secret   |
+
+### PGAdmin4 for GUI access
+
+> **Note:** PGAdmin4 is optional, but useful for managing the database.
+
+You can access pgAdmin4 at the URL (after starting the Docker Compose):
+
+```
+http://localhost:16543
+```
+
+| Field (Register “General → Connection”) | Value       |
+|-----------------------------------------|-------------|
+| Host name/address                       | lernello-db |
+| Port	                                   | 15432       |
+| Maintenance database	                   | lernello    |
+| Username	                               | postgres    |
+| Password	                               | secret      |
+
+```bash
+# quick psql inside the container
+docker exec -it lernello-db   psql -U postgres -d lernello
+```
+
+### 🚀 One-shot dev start
+
+```bash
+gradle startDev
+```
+
+This will
+
+1. Start PostgreSQL via Docker Compose
+2. Run Spring Boot with the **`local`** profile (`gradlew bootRun`)
+
+---
 
 ## Frontend (`/frontend`)
 
-SvelteKit, TypeScript, Skeleton, TailwindCSS, Prettier, Eslint.
+> **Stack:** SvelteKit · TypeScript · Skeleton UI · TailwindCSS · Prettier · ESLint
 
 ### Requirements
 
-- NodeJS
+- Node.js 18 +
 
-### Scripts
+### Common Commands
 
-- `npm i` to install dependencies
-- `npm run dev` to start a local development server
-- `npm run lint` to lint check
-- `npm run format` to format with prettier (your IDE can do this automatically)
+```bash
+npm i            # install dependencies
+npm run dev      # local dev server
+npm run lint     # eslint
+npm run format   # prettier
+```
+
+---
 
 ## Swagger
 
-If you want to see what API endpoints are available...
+Browse the generated API docs at
 
-- http://localhost:8080/swagger-ui/index.html
+```
+http://localhost:8080/swagger-ui/index.html
+```
 
-## H2 Database
+---
 
-- To start and connect the DB run the `gradle bootRun` script.
-- To test and show the DB, go to the console
-  - http://localhost:8080/h2-console
-  - Connect with the url: `jdbc:h2:./data/LernelloData`
+_Happy coding!_ 🦉

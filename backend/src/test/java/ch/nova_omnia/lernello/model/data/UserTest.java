@@ -3,14 +3,17 @@ package ch.nova_omnia.lernello.model.data;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import ch.nova_omnia.lernello.PostgresTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import ch.nova_omnia.lernello.user.model.Role;
 import ch.nova_omnia.lernello.user.model.User;
+import org.springframework.context.annotation.Import;
 
 @DataJpaTest
+@Import(PostgresTestConfig.class)
 public class UserTest {
     private User user;
 
