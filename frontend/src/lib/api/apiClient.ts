@@ -6,6 +6,7 @@ import { LoggedInUserSchema } from '$lib/schemas/response/LoggedInUser';
 import { PUBLIC_API_BASE_URL } from '$env/static/public';
 
 // TODO handle different environments
+// Test comment for actions
 export const BASE_URL = PUBLIC_API_BASE_URL;
 
 function buildRequestInit({
