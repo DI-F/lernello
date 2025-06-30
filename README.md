@@ -12,7 +12,7 @@ Check the project sketch (German, PDF):
 ## 📦 Table of Contents
 
 1. [Backend](#backend-backend)
-2. [PostgreSQL (Dev)](#-postgresql-dev)
+2. [PostgreSQL](#-postgresql-docker)
 3. [Frontend](#frontend-frontend)
 4. [Swagger / API Docs](#swagger)
 
