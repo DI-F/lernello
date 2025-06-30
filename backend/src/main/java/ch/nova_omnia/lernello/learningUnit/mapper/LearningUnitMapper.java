@@ -25,6 +25,7 @@ import ch.nova_omnia.lernello.learningUnit.dto.request.CreateLearningUnitDTO;
 import ch.nova_omnia.lernello.learningUnit.dto.response.LearningUnitResDTO;
 import ch.nova_omnia.lernello.learningUnit.model.LearningUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class LearningUnitMapper {
         return new LearningUnit(dto.name(), learningKit);
     }
 
+    @Transactional()
     public LearningUnitResDTO toDTO(LearningUnit learningUnit) {
         List<BlockResDTO> sortedBlocks = learningUnit.getBlocks().stream().filter(block -> !(block instanceof TranslatedBlock)) // TranslatedBlock herausfiltern
                 .sorted(Comparator.comparingInt(Block::getPosition)).map(this::mapBlockToResDTO).toList();
