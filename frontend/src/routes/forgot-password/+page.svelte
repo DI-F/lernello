@@ -81,7 +81,7 @@
 		</div>
 	</form>
 	{#if showSuccess}
-		<p class="text-success-500">
+		<p class="text-primary-500">
 			{$_('passwordForgot.emailSent')}
 		</p>
 	{/if}
