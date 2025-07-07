@@ -2,6 +2,7 @@ package ch.nova_omnia.lernello.user.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "password_reset_tokens")
 @NoArgsConstructor
+@AllArgsConstructor
 public class PasswordResetToken {
 
     @Id

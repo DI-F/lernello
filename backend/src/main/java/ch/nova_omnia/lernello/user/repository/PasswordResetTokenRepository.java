@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, UUID> {
     Optional<PasswordResetToken> findByToken(String token);
 
-    void deleteAllByUser(User user); // optional für Token-Invalidierung
+    void invalidateTokensForUser(User user); // optional for token invalidation
 }
