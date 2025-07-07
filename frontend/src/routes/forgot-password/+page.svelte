@@ -8,6 +8,7 @@
 
 	let { data } = $props();
 	let isLoading = $state(false);
+	let showSuccess = $state(false);
 
 	const returnToLogin = () => {
 		goto('/login');
@@ -19,6 +20,7 @@
 		},
 		onUpdate: () => {
 			isLoading = false;
+			showSuccess = true;
 			toaster.create({
 				description: $_('passwordForgot.emailSent'),
 				type: 'success'
@@ -78,5 +80,10 @@
 			</button>
 		</div>
 	</form>
+	{#if showSuccess}
+		<p class="text-success-500">
+			{$_('passwordForgot.emailSent')}
+		</p>
+	{/if}
 	<SuperDebug data={$form} display={dev} />
 </main>
