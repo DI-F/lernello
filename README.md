@@ -26,8 +26,8 @@ Check the project sketch (German, PDF):
 
 | Tool   | Version              |
 |--------|----------------------|
-| Java   | 23                   |
-| Gradle | 8 (Wrapper included) |
+| Java   | 24                   |
+| Gradle | 9 (Wrapper included) |
 
 ### Common Commands
 
