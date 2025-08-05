@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ch.nova_omnia.lernello.learningUnit.dto.request.SaveLearningUnitDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,6 +64,13 @@ public class LearningUnitRestController {
     @PreAuthorize("hasAuthority('SCOPE_learningUnit:write')")
     public @Valid LearningUnitResDTO renameLearningUnit(@Valid @RequestBody RenameLearningUnitDTO renameLearningUnitDTO, @PathVariable UUID id) {
         LearningUnit learningUnit = learningUnitService.renameLearningUnit(id, renameLearningUnitDTO.name());
+        return learningUnitMapper.toDTO(learningUnit);
+    }
+
+    @PostMapping("/{id}/save")
+    @PreAuthorize("hasAuthority('SCOPE_learningUnit:write')")
+    public @Valid LearningUnitResDTO saveLearningUnit(@Valid @RequestBody SaveLearningUnitDTO saveLearningUnitDTO, @PathVariable UUID id) {
+        LearningUnit learningUnit = learningUnitService.saveLearningUnit(id, saveLearningUnitDTO);
         return learningUnitMapper.toDTO(learningUnit);
     }
 

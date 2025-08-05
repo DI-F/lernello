@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ch.nova_omnia.lernello.block.dto.request.blocks.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,6 +101,67 @@ public class BlockService {
 
         learningUnitRepository.saveAndFlush(learningUnit);
         return temporaryKeyMap;
+    }
+
+    @Transactional
+    public Block saveBlock(LearningUnit learningUnit, BlockDTO blockDTO) {
+        if (blockDTO == null) {
+            throw new IllegalArgumentException("BlockDTO cannot be null");
+        }
+        if (blockDTO instanceof TheoryBlockDTO theoryBlock) {
+            TheoryBlock block = (TheoryBlock) blockRepository.findById(theoryBlock.uuid()).orElse(new TheoryBlock());
+            block.setType(BlockType.THEORY);
+            block.setUuid(theoryBlock.uuid());
+            block.setName(theoryBlock.name());
+            block.setPosition(theoryBlock.position());
+            block.setLearningUnit(learningUnit);
+            block.setContent(theoryBlock.content());
+
+            if (theoryBlock.translatedContents() != null) {
+                for (TranslatedBlockDTO translated : theoryBlock.translatedContents()) {
+                    TranslatedBlock translatedBlock = new TranslatedBlock(translated.language(), translated.content(), block, translated.name());
+                    translatedBlockRepository.save(translatedBlock);
+                }
+            }
+            return blockRepository.saveAndFlush(block);
+        } else if (blockDTO instanceof MultipleChoiceBlockDTO multipleChoiceBlock) {
+            MultipleChoiceBlock block = (MultipleChoiceBlock) blockRepository.findById(multipleChoiceBlock.uuid()).orElse(new MultipleChoiceBlock());
+            block.setType(BlockType.MULTIPLE_CHOICE);
+            block.setUuid(multipleChoiceBlock.uuid());
+            block.setName(multipleChoiceBlock.name());
+            block.setPosition(multipleChoiceBlock.position());
+            block.setLearningUnit(learningUnit);
+            block.setQuestion(multipleChoiceBlock.question());
+            block.setPossibleAnswers(multipleChoiceBlock.possibleAnswers());
+            block.setCorrectAnswers(multipleChoiceBlock.correctAnswers());
+            if (multipleChoiceBlock.translatedContents() != null) {
+                for (TranslatedBlockDTO translated : multipleChoiceBlock.translatedContents()) {
+                    TranslatedBlock translatedBlock = new TranslatedBlock(translated.language(), translated.question(), "", block, translated.name());
+                    translatedBlock.setPossibleAnswers(multipleChoiceBlock.possibleAnswers());
+                    translatedBlock.setCorrectAnswers(multipleChoiceBlock.correctAnswers());
+                    translatedBlockRepository.save(translatedBlock);
+                }
+            }
+            return blockRepository.saveAndFlush(block);
+        } else if (blockDTO instanceof QuestionBlockDTO questionBlock) {
+            QuestionBlock block = (QuestionBlock) blockRepository.findById(questionBlock.uuid()).orElse(new QuestionBlock());
+            block.setType(BlockType.QUESTION);
+            block.setUuid(questionBlock.uuid());
+            block.setName(questionBlock.name());
+            block.setPosition(questionBlock.position());
+            block.setLearningUnit(learningUnit);
+            block.setQuestion(questionBlock.question());
+            block.setExpectedAnswer(questionBlock.expectedAnswer());
+            if (questionBlock.translatedContents() != null) {
+                for (TranslatedBlockDTO translated : questionBlock.translatedContents()) {
+                    TranslatedBlock translatedBlock = new TranslatedBlock(translated.language(), translated.question(), translated.expectedAnswer(), block, translated.name());
+                    translatedBlockRepository.save(translatedBlock);
+                }
+            }
+            return blockRepository.saveAndFlush(block);
+        } else {
+            throw new IllegalArgumentException("Unsupported block type for saving: " + blockDTO);
+        }
     }
 
     private void addBlock(LearningUnit learningUnit, AddBlockActionDTO addAction) throws IllegalArgumentException {

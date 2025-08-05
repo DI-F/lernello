@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.nova_omnia.lernello.block.dto.request.blocks.BlockDTO;
+import ch.nova_omnia.lernello.block.service.BlockService;
+import ch.nova_omnia.lernello.learningUnit.dto.request.SaveLearningUnitDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,7 @@ public class LearningUnitService {
     private final BlockRepository blockRepository;
     private final AIBlockService aiBlockService;
     private final BlockStatisticRepository blockProgressRepository;
+    private final BlockService blockService;
 
     @Transactional
     public LearningUnit createLearningUnit(LearningUnit learningUnit, UUID learningKitId) {
@@ -48,6 +52,20 @@ public class LearningUnitService {
 
     public List<LearningUnit> findAll() {
         return learningUnitRepository.findAll();
+    }
+
+    @Transactional
+    public LearningUnit saveLearningUnit(UUID id, SaveLearningUnitDTO learningUnit) {
+        LearningUnit existingLearningUnit = learningUnitRepository.findById(id).orElseThrow(() -> new RuntimeException("Learning Unit not found with ID: " + id));
+        existingLearningUnit.setName(learningUnit.name());
+        existingLearningUnit.setPosition(learningUnit.position());
+        existingLearningUnit.setBlocks(new ArrayList<>());
+        for (BlockDTO blockDTO : learningUnit.blocks()) {
+            Block block = blockService.saveBlock(existingLearningUnit, blockDTO);
+            existingLearningUnit.getBlocks().add(block);
+        }
+        learningUnitRepository.save(existingLearningUnit);
+        return existingLearningUnit;
     }
 
     @Transactional
